@@ -13,11 +13,15 @@ import {AppState} from '../app.reducer';
 import { map } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import {User} from './user.model';
+import {SetUserAction} from './auth.actions';
+import {Subscription} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
+  private userSubscription: Subscription = new Subscription();
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -29,7 +33,15 @@ export class AuthService {
 
   initAuthListener() {
     this.afAuth.authState.subscribe((fbUser: firebase.User) => {
-      console.log(fbUser);
+      if (fbUser) {
+        this.userSubscription = this.afDB.doc(`${ fbUser.uid }/usuario`).valueChanges()
+          .subscribe( (usuarioDoc: any) => {
+            const newUser = new User(usuarioDoc);
+            this.store.dispatch(new SetUserAction(newUser));
+          });
+      } else {
+        this.userSubscription.unsubscribe();
+      }
     });
   }
 

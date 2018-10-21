@@ -4,10 +4,16 @@ export class User {
   public email: string;
   public uid: string;
 
-  constructor(nombre: string, email: string, uid: string) {
-    this.nombre = nombre;
-    this.email = email;
-    this.uid = uid;
+  constructor(doc: DocObj) {
+    this.nombre = doc && doc.nombre || null;
+    this.email = doc && doc.email || null;
+    this.uid = doc && doc.uid || null;
   }
 
+}
+
+interface DocObj {
+  uid: string;
+  email: string;
+  nombre: string;
 }
