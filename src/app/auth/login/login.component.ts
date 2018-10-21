@@ -19,7 +19,6 @@ export class LoginComponent implements OnInit {
 
   onSubmit(data: any) {
     const { email, password } = data;
-    console.log(data);
     this.authService.autenticarUsuario(email, password);
   }
 

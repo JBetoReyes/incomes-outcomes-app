@@ -16,9 +16,8 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit( data: any ) {
-    console.log(data);
     const { nombre, email, password } = data;
-    this.authService.crearUsuario(email, password);
+    this.authService.crearUsuario(email, password, nombre);
   }
 
 }
