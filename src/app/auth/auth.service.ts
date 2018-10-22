@@ -13,7 +13,7 @@ import {AppState} from '../app.reducer';
 import { map } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import {User} from './user.model';
-import {SetUserAction} from './auth.actions';
+import {SetUserAction, UnsetUserAction} from './auth.actions';
 import {Subscription} from 'rxjs';
 
 @Injectable({
@@ -22,6 +22,7 @@ import {Subscription} from 'rxjs';
 export class AuthService {
 
   private userSubscription: Subscription = new Subscription();
+  private usuario: User;
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -38,8 +39,10 @@ export class AuthService {
           .subscribe( (usuarioDoc: any) => {
             const newUser = new User(usuarioDoc);
             this.store.dispatch(new SetUserAction(newUser));
+            this.usuario = newUser;
           });
       } else {
+        this.usuario = null;
         this.userSubscription.unsubscribe();
       }
     });
@@ -52,8 +55,6 @@ export class AuthService {
     this.afAuth.auth
       .createUserWithEmailAndPassword(email, password)
       .then((resp)  => {
-        console.log(resp);
-
         const user: User = {
           uid: resp.user.uid,
           nombre: nombre,
@@ -95,6 +96,7 @@ export class AuthService {
   }
 
   logout() {
+    this.store.dispatch( new UnsetUserAction());
     this.router.navigate(['/login']);
     this.afAuth.auth.signOut();
   }
@@ -111,4 +113,9 @@ export class AuthService {
         })
       );
   }
+
+  getUsuario() {
+    return { ...this.usuario };
+  }
+
 }

@@ -3,12 +3,15 @@ import { NgModule } from '@angular/core';
 
 // modules
 import {AppRoutingModule} from '../../app-routing.module';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 // NGRX
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import {appReducers} from './app.reducer';
+
+// grphics
+import {ChartsModule} from 'ng2-charts';
 
 // firebase
 import { AngularFireModule } from '@angular/fire';
@@ -26,6 +29,7 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import {environment} from '../environments/environment';
+import { OrdenIngresoEgresoPipe } from './ingreso-egreso/orden-ingreso-egreso.pipe';
 
 @NgModule({
   declarations: [
@@ -38,12 +42,15 @@ import {environment} from '../environments/environment';
     DetalleComponent,
     FooterComponent,
     NavbarComponent,
-    SidebarComponent
+    SidebarComponent,
+    OrdenIngresoEgresoPipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
+    ChartsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
